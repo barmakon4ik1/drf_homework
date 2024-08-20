@@ -18,6 +18,12 @@ class TaskPagination(PageNumberPagination): # Использование кла�
     max_page_size = 20
 
 
+class SubTaskPagination(PageNumberPagination): # Использование класса пагинации 1 способ
+    page_size = 2 # Количество элементов на странице
+    page_size_query_param = 'page_size'
+    max_page_size = 20
+
+
 # class TaskCursorPagination(CursorPagination):
 #     page_size = 2
 #     ordering = 'title' # Поле для курсора
@@ -29,15 +35,25 @@ class TaskListCreateAPIView(ListCreateAPIView):
     pagination_class = TaskPagination  # Использование класса пагинации 1 способ
     # pagination_class = TaskCursorPagination  # Использование класса пагинации CursorPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['title', 'deadline']
-    search_fields = ['title', 'categories']
-    ordering_fields = ['deadline', 'title']
+    filterset_fields = ['status', 'deadline']
+    search_fields = ['title', 'description']
+    ordering_fields = ['created_at']
+
+
+class TaskRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
 
 
 class SubTaskListCreateAPIView(ListCreateAPIView):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
-    pagination_class = TaskPagination
+    pagination_class = SubTaskPagination  # Использование класса пагинации 1 способ
+    # pagination_class = TaskCursorPagination  # Использование класса пагинации CursorPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['status', 'deadline']
+    search_fields = ['title', 'description']
+    ordering_fields = ['created_at']
 
 
 class SubTaskDetailUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
