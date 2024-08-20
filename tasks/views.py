@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from rest_framework.generics import ListCreateAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .models import *
@@ -32,6 +32,18 @@ class TaskListCreateAPIView(ListCreateAPIView):
     filterset_fields = ['title', 'deadline']
     search_fields = ['title', 'categories']
     ordering_fields = ['deadline', 'title']
+
+
+class SubTaskListCreateAPIView(ListCreateAPIView):
+    queryset = SubTask.objects.all()
+    serializer_class = SubTaskSerializer
+    pagination_class = TaskPagination
+
+
+class SubTaskDetailUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = SubTask.objects.all()
+    serializer_class = SubTaskSerializer
+
 
 
 # Представление для всех задач GET и POST:

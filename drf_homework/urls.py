@@ -6,6 +6,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Пагинация и фильтры:
     path('task/', TaskListCreateAPIView.as_view(), name='tasks'),
+    path('subtasks/', SubTaskListCreateAPIView.as_view(), name='subtask-list-create'),
+    path('subtasks/<int:pk>/', SubTaskDetailUpdateDeleteAPIView.as_view(), name='subtask-detail-update-delete'),
 
 
     # Для получения всех задач и создания новой:
