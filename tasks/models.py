@@ -34,6 +34,13 @@ class Task(models.Model):
         db_table = 'task_manager_task'
         ordering = ['-created_at']
         verbose_name = 'Task'
+        verbose_name_plural = 'Tasks'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title'],
+                name='unique_task'
+            )  # Уникальность по полю 'title'
+        ]
 
 
 class SubTask(models.Model):
@@ -67,6 +74,13 @@ class SubTask(models.Model):
         db_table = 'task_manager_subtask'
         ordering = ['-created_at']
         verbose_name = 'Subtask'
+        verbose_name_plural = 'Subtasks'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title'],
+                name='unique_subtask'
+            )
+        ]
 
 
 class Category(models.Model):
