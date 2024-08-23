@@ -21,8 +21,6 @@ class TaskCreateSerializer(serializers.ModelSerializer):
         return value
 
 
-
-
 class TaskCreateUpdateSerializer(TaskSerializer):
     # Используется для создания новой или обновления сцществующей задачи. Включает только указанные поля.
     class Meta:
@@ -40,6 +38,12 @@ class SubTaskCreateSerializer(serializers.ModelSerializer):
         model = SubTask
         fields = '__all__'
         read_only_fields = ['created_at']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 
 class CategoryCreateSerializer(serializers.ModelSerializer):

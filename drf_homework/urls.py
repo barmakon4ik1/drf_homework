@@ -1,8 +1,14 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from tasks.views import *
 
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+
+
 urlpatterns = [
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
     # Пагинация и фильтры:
     path('task/', TaskListCreateAPIView.as_view(), name='tasks'),

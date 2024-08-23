@@ -7,6 +7,12 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 3,  # Размер страницы по умолчанию
+}
+
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",

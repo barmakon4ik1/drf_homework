@@ -1,9 +1,10 @@
+import category
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from rest_framework import status, generics
+from rest_framework import status, generics, viewsets
 from .models import *
 from .serializers import *
 from rest_framework.pagination import PageNumberPagination, CursorPagination
@@ -12,16 +13,16 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-class TaskPagination(PageNumberPagination): # Использование класса пагинации 1 способ
-    page_size = 2 # Количество элементов на странице
-    page_size_query_param = 'page_size'
-    max_page_size = 20
+# class TaskPagination(PageNumberPagination): # Использование класса пагинации 1 способ
+#     page_size = 2 # Количество элементов на странице
+#     page_size_query_param = 'page_size'
+#     max_page_size = 20
 
 
-class SubTaskPagination(PageNumberPagination): # Использование класса пагинации 1 способ
-    page_size = 2 # Количество элементов на странице
-    page_size_query_param = 'page_size'
-    max_page_size = 20
+# class SubTaskPagination(PageNumberPagination): # Использование класса пагинации 1 способ
+#     page_size = 2 # Количество элементов на странице
+#     page_size_query_param = 'page_size'
+#     max_page_size = 20
 
 
 # class TaskCursorPagination(CursorPagination):
@@ -32,7 +33,7 @@ class SubTaskPagination(PageNumberPagination): # Использование кл
 class TaskListCreateAPIView(ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    pagination_class = TaskPagination  # Использование класса пагинации 1 способ
+    # pagination_class = TaskPagination  # Использование класса пагинации 1 способ
     # pagination_class = TaskCursorPagination  # Использование класса пагинации CursorPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['status', 'deadline']
@@ -48,7 +49,7 @@ class TaskRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 class SubTaskListCreateAPIView(ListCreateAPIView):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
-    pagination_class = SubTaskPagination  # Использование класса пагинации 1 способ
+    # pagination_class = SubTaskPagination  # Использование класса пагинации 1 способ
     # pagination_class = TaskCursorPagination  # Использование класса пагинации CursorPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['status', 'deadline']
@@ -59,7 +60,6 @@ class SubTaskListCreateAPIView(ListCreateAPIView):
 class SubTaskDetailUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
-
 
 
 # Представление для всех задач GET и POST:
@@ -175,3 +175,29 @@ def task_list(request):
     for stat in sum_by_status:
         print(f'Статус: {stat["status"]}, Количество задач: {stat["sum_by_status"]}')
     print(f'Общее количество просроченных задач: {sum_end_deadline["sum_by_deadline"]}')"""
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    @action(detail=False, methods=['get'])
+    def count_tasks(self, request):
+        categories_with_task_counts = Category.objects.annotate(task_count=Count('task'))
+
+        data = [
+            {
+                "id": category.id,
+                "category": category.name,
+                "task_count": category.task_count
+            }
+            for category in categories_with_task_counts
+        ]
+        return Response(data)
+
+
+# Добавьте кастомный метод count_tasks для подсчета количества задач,
+# связанных с каждой категорией.
+# Используйте роутер для автоматической генерации маршрутов.
+
+
