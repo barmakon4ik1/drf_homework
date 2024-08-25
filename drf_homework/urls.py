@@ -23,5 +23,6 @@ urlpatterns = [
 
     # # JSon с пагинацией
     # path('info/', task_list, name='task_list'),
-
+    path('subtasks-API/', SubTaskListCreateView.as_view(), name='subtask-list-create'),
+    path('subtasks-API/<int:pk>/', SubTaskDetailUpdateDeleteView.as_view(), name='subtask-detail-update-delete')
 ]
