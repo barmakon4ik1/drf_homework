@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="345d9c47-638e-4676-90c0-4924b4ed9c03" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/tasks/middleware.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/drf_homework/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/drf_homework/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drf_homework/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/drf_homework/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tasks/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tasks/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tasks/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tasks/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tasks/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/tasks/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,32 +40,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Django Server.drf_homework.executor": "Run",
-    "Python tests.Python tests for tests.TestFileOperations.test_read_nonexistent_file.executor": "Run",
-    "Python tests.Python tests for tests.TestFileOperations.test_write_and_read_empty_file.executor": "Run",
-    "Python tests.Python tests for tests.TestFileOperations.test_write_and_read_file.executor": "Run",
-    "Python tests.Python tests for tests.TestFileOperations.test_write_bad_data_into_file.executor": "Run",
-    "Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_clean_text_converts_to_lowercase.executor": "Run",
-    "Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_clean_text_handles_empty_string.executor": "Run",
-    "Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_clean_text_removes_non_alphabetic_characters.executor": "Run",
-    "Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_remove_stop_words_calls_clean_text_if_needed.executor": "Run",
-    "Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_remove_stop_words_removes_specified_words.executor": "Run",
-    "Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_remove_stop_words_works_without_any_stop_words.executor": "Run",
-    "Python tests.Python tests in tests.py.executor": "Run",
-    "Python tests.Python tests in tests_for_text_processor.py.executor": "Run",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Django Server.drf_homework.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests.TestFileOperations.test_read_nonexistent_file.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests.TestFileOperations.test_write_and_read_empty_file.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests.TestFileOperations.test_write_and_read_file.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests.TestFileOperations.test_write_bad_data_into_file.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_clean_text_converts_to_lowercase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_clean_text_handles_empty_string.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_clean_text_removes_non_alphabetic_characters.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_remove_stop_words_calls_clean_text_if_needed.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_remove_stop_words_removes_specified_words.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests_for_text_processor.TestTextProcessor.test_remove_stop_words_works_without_any_stop_words.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in tests.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in tests_for_text_processor.py.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Django Server.drf_homework">
     <configuration name="drf_homework" type="Python.DjangoServer" factoryName="Django server">
       <module name="drf_homework" />
@@ -211,7 +207,8 @@
       <workItem from="1724591324581" duration="5301000" />
       <workItem from="1724614234905" duration="1527000" />
       <workItem from="1724655904482" duration="1113000" />
-      <workItem from="1724690807137" duration="3198000" />
+      <workItem from="1724690807137" duration="3921000" />
+      <workItem from="1724702683726" duration="1412000" />
     </task>
     <servers />
   </component>

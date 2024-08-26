@@ -12,6 +12,8 @@ router.register(r'categories', CategoryViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+
+    path('protected/', ProtectedDataView.as_view(), name='protected-data'),
     # Пагинация и фильтры:
     path('task/', TaskListCreateAPIView.as_view(), name='tasks'),
     path('subtasks/', SubTaskListCreateAPIView.as_view(), name='subtask-list-create'),
