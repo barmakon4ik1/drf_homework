@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.authtoken.admin import User
 from rest_framework.exceptions import ValidationError
 
 from .models import *
@@ -95,3 +96,18 @@ class TaskDetailSerializer(serializers.ModelSerializer):
         representation['subtasks'] = SubTaskSerializer(instance.subtasks.all(), many=True).data
         return representation
 
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password'],
+            email=validated_data.get('email', '')
+        )
+        return user

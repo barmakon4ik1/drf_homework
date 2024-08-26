@@ -1,14 +1,18 @@
+from datetime import datetime
 import category
+from django.contrib.auth import authenticate
 from django.core.paginator import Paginator
 from django.http import JsonResponse, Http404
 from rest_framework.decorators import api_view, action
 from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, generics, viewsets
 from rest_framework.views import APIView
-
-from .models import *
-from .serializers import *
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
+from tasks.models import *
+from tasks.serializers import *
 from rest_framework.pagination import PageNumberPagination, CursorPagination
 from django.db.models import Count
 from rest_framework import filters
@@ -30,6 +34,29 @@ from django_filters.rest_framework import DjangoFilterBackend
 # class TaskCursorPagination(CursorPagination):
 #     page_size = 2
 #     ordering = 'title' # Поле для курсора
+
+def set_jwt_cookies(response, user):
+    refresh_token = RefreshToken.for_user(user)
+    access_token = refresh_token.access_token
+    # Устанавливает JWT токены в куки.
+    access_expiry = datetime.utcfromtimestamp(access_token['exp'])
+    refresh_expiry = datetime.utcfromtimestamp(refresh_token['exp'])
+    response.set_cookie(
+        key='access_token',
+        value=str(access_token),
+        httponly=True,
+        secure=False,
+        samesite='Lax',
+        expires=access_expiry
+    )
+    response.set_cookie(
+        key='refresh_token',
+        value=str(refresh_token),
+        httponly=True,
+        secure=False,
+        samesite='Lax',
+        expires=refresh_expiry
+    )
 
 
 class TaskListCreateAPIView(ListCreateAPIView):
@@ -198,22 +225,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return Response(data)
 
 
-# Задание 5: Создание классов представлений
-# Создайте классы представлений для работы с подзадачами (SubTasks),
-# включая создание, получение, обновление и удаление подзадач.
-# Используйте классы представлений (APIView) для реализации этого функционала.
-#
-# Шаги для выполнения:
-#
-# Создайте классы представлений для создания и получения списка подзадач
-# (SubTaskListCreateView).
-#
-# Создайте классы представлений для получения,
-# обновления и удаления подзадач (SubTaskDetailUpdateDeleteView).
-#
-# Добавьте маршруты в файле urls.py,
-# чтобы использовать эти классы.
-
 class SubTaskListCreateView(APIView):
     def get(self, request):
         subtasks = SubTask.objects.all()
@@ -254,4 +265,101 @@ class SubTaskDetailUpdateDeleteView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class LoginView(APIView):
+    permission_classes = [AllowAny]
 
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user:
+            refresh = RefreshToken.for_user(user)
+            access_token = refresh.access_token
+            # Используем exp для установки времени истечения куки
+            access_expiry = datetime.utcfromtimestamp(access_token['exp'])
+            refresh_expiry = datetime.utcfromtimestamp(refresh['exp'])
+            response = Response(status=status.HTTP_200_OK)
+            response.set_cookie(
+                key='access_token',
+                value=str(access_token),
+                httponly=True,
+                secure=False,  # Используйте True для HTTPS
+                samesite='Lax',
+                expires=access_expiry
+            )
+            response.set_cookie(
+                key='refresh_token',
+                value=str(refresh),
+                httponly=True,
+                secure=False,
+                samesite='Lax',
+                expires=refresh_expiry
+            )
+            return response
+        else:
+            return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class LogoutView(APIView):
+    def post(self, request, *args, **kwargs):
+        response = Response(status=status.HTTP_204_NO_CONTENT)
+        response.delete_cookie('access_token')
+        response.delete_cookie('refresh_token')
+        return response
+
+
+class ProtectedDataView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "Hello, authenticated user!", "user": request.user.username})
+
+
+class RegisterView(APIView):
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            response = Response({
+                'user': {
+                    'username': user.username,
+                    'email': user.email
+                }
+            }, status=status.HTTP_201_CREATED)
+            set_jwt_cookies(response, user)
+            return response
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PublicView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        return Response({"message": "This is accessible by anyone!"})
+
+
+class PrivateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": f"Hello, {request.user.username}!"})
+
+
+class AdminView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        return Response({"message": "Hello, Admin!"})
+
+
+class ReadOnlyOrAuthenticatedView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        return Response({"message": "This is readable by anyone, but modifiable only by authenticated users."})
+
+    def post(self, request):
+        return Response({"message": "Data created by authenticated user!"})

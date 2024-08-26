@@ -1,7 +1,9 @@
 from django.contrib import admin
+# from django.contrib.auth.views import LoginView
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from tasks.views import *
+
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
@@ -24,5 +26,10 @@ urlpatterns = [
     # # JSon с пагинацией
     # path('info/', task_list, name='task_list'),
     path('subtasks-API/', SubTaskListCreateView.as_view(), name='subtask-list-create'),
-    path('subtasks-API/<int:pk>/', SubTaskDetailUpdateDeleteView.as_view(), name='subtask-detail-update-delete')
+    path('subtasks-API/<int:pk>/', SubTaskDetailUpdateDeleteView.as_view(), name='subtask-detail-update-delete'),
+
+    path('api/login/', LoginView.as_view(), name='login'),
+    path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/register/', RegisterView.as_view(), name='register'),
+    path('api/', ReadOnlyOrAuthenticatedView.as_view(), name='admin')
 ]
