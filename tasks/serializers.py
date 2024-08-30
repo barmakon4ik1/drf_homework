@@ -10,6 +10,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
+        read_only_fields = ['owner'] # Автоматическое добавление владельца объекта
 
 
 class TaskCreateSerializer(serializers.ModelSerializer):

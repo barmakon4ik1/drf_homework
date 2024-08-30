@@ -34,12 +34,15 @@ from django_filters.rest_framework import DjangoFilterBackend
 #     page_size = 2
 #     ordering = 'title' # Поле для курсора
 
+# Создание представления для регистрации
 def set_jwt_cookies(response, user):
     refresh_token = RefreshToken.for_user(user)
     access_token = refresh_token.access_token
+
     # Устанавливает JWT токены в куки.
     access_expiry = datetime.utcfromtimestamp(access_token['exp'])
     refresh_expiry = datetime.utcfromtimestamp(refresh_token['exp'])
+
     response.set_cookie(
         key='access_token',
         value=str(access_token),
@@ -67,7 +70,12 @@ class TaskListCreateAPIView(ListCreateAPIView):
     filterset_fields = ['status', 'deadline']
     search_fields = ['title', 'description']
     ordering_fields = ['created_at']
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
+
+    # Метод, вызываемый при создании объекта, позволяет
+    # добавить дополнительные данные перед сохранением
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user) # Извлекает текущего аутентифицированного пользователя из запроса
 
 
 class TaskRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -85,7 +93,10 @@ class SubTaskListCreateAPIView(ListCreateAPIView):
     filterset_fields = ['status', 'deadline']
     search_fields = ['title', 'description']
     ordering_fields = ['created_at']
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class SubTaskDetailUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
@@ -321,6 +332,8 @@ class ProtectedDataView(APIView):
         return Response({"message": "Hello, authenticated user!", "user": request.user.username})
 
 
+# представление, которое будет обрабатывать POST запросы для
+# регистрации новых пользователей. Сразу выдает refresh и access токены.
 class RegisterView(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
@@ -338,6 +351,8 @@ class RegisterView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Класс AllowAny предоставляет доступ к ресурсу всем пользователям, независимо от
+# того, аутентифицированы они или нет.
 class PublicView(APIView):
     permission_classes = [AllowAny]
 
@@ -345,6 +360,9 @@ class PublicView(APIView):
         return Response({"message": "This is accessible by anyone!"})
 
 
+# Класс IsAuthenticated предоставляет доступ только аутентифицированным
+# пользователям. Если пользователь не аутентифицирован, он получит ошибку 401
+# Unauthorized.
 class PrivateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -352,6 +370,8 @@ class PrivateView(APIView):
         return Response({"message": f"Hello, {request.user.username}!"})
 
 
+# Класс IsAdminUser предоставляет доступ только администраторам. Пользователи
+# должны быть аутентифицированы и иметь статус администратора (is_staff=True).
 class AdminView(APIView):
     permission_classes = [IsAdminUser]
 
@@ -359,6 +379,9 @@ class AdminView(APIView):
         return Response({"message": "Hello, Admin!"})
 
 
+# Класс IsAuthenticatedOrReadOnly позволяет аутентифицированным пользователям
+# выполнять все действия, а не аутентифицированным пользователям только читать
+# данные GET, HEAD, OPTIONS
 class ReadOnlyOrAuthenticatedView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 

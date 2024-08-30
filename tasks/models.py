@@ -27,6 +27,7 @@ class Task(models.Model):
         verbose_name="Время начала выполнения"
     )
 
+
     def __str__(self):
         return self.title
 
