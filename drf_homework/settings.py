@@ -21,7 +21,7 @@ REST_FRAMEWORK = {
     # разрешений, которые будут применяться ко всем представлениям по
     # умолчанию, если они не переопределены в самих представлениях:
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ]
 }
 

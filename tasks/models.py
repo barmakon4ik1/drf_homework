@@ -4,6 +4,8 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from rest_framework.authtoken.admin import User
+
 from .variables import *
 
 
@@ -26,7 +28,12 @@ class Task(models.Model):
         auto_now_add=True,
         verbose_name="Время начала выполнения"
     )
-
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='tasks',
+        null=True, blank=True
+    )
 
     def __str__(self):
         return self.title
@@ -66,6 +73,12 @@ class SubTask(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Время начала выполнения"
+    )
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='subtasks',
+        null=True, blank=True
     )
 
     def __str__(self):

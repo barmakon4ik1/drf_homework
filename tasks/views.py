@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from tasks.models import *
+from tasks.permissions import *
 from tasks.serializers import *
 from rest_framework.pagination import PageNumberPagination, CursorPagination
 from django.db.models import Count
@@ -76,12 +77,14 @@ class TaskListCreateAPIView(ListCreateAPIView):
     # добавить дополнительные данные перед сохранением
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user) # Извлекает текущего аутентифицированного пользователя из запроса
+    # Теперь не нужно отправлять id пользователя при создании задачи, она будет
+    # автоматически получена из запроса.
 
 
 class TaskRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrOwner]
 
 
 class SubTaskListCreateAPIView(ListCreateAPIView):
@@ -102,7 +105,7 @@ class SubTaskListCreateAPIView(ListCreateAPIView):
 class SubTaskDetailUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrOwner]
 
 
 # Представление для всех задач GET и POST:
@@ -390,3 +393,13 @@ class ReadOnlyOrAuthenticatedView(APIView):
 
     def post(self, request):
         return Response({"message": "Data created by authenticated user!"})
+
+
+# Извлечение пользователя для получения задач, где он является создателем
+class UserTaskListView(ListAPIView):
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Task.objects.filter(owner=self.request.user)
+

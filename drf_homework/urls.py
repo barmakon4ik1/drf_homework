@@ -31,15 +31,17 @@ urlpatterns = [
 
     path('protected/', ProtectedDataView.as_view(), name='protected-data'),
     # Пагинация и фильтры:
-    path('task/', TaskListCreateAPIView.as_view(), name='tasks'),
+    path('tasks/', TaskListCreateAPIView.as_view(), name='tasks'),
     path('subtasks/', SubTaskListCreateAPIView.as_view(), name='subtask-list-create'),
     path('subtasks/<int:pk>/', SubTaskDetailUpdateDeleteAPIView.as_view(), name='subtask-detail-update-delete'),
 
 
     # Для получения всех задач и создания новой:
-    path('tasks/', task_list_create, name='task-list-create'),
+    path('task/', task_list_create, name='task-list-create'),
     # Для операции с одной задачей
-    path('tasks/<int:pk>/', task_detail_update_delete, name='task-detail-update-delete'),
+    path('tasks/<int:pk>/', TaskRetrieveUpdateDestroyAPIView.as_view(),
+         name='task-detail-update-delete'),
+    path('user-tasks', UserTaskListView.as_view(), name='user-tasks'),
 
     # # JSon с пагинацией
     # path('info/', task_list, name='task_list'),

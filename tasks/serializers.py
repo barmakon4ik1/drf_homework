@@ -39,7 +39,7 @@ class SubTaskCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubTask
         fields = '__all__'
-        read_only_fields = ['created_at']
+        read_only_fields = ['created_at', 'owner']
 
 
 class CategorySerializer(serializers.ModelSerializer):
