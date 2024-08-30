@@ -1,5 +1,4 @@
 from datetime import datetime
-import category
 from django.contrib.auth import authenticate
 from django.core.paginator import Paginator
 from django.http import JsonResponse, Http404
@@ -68,11 +67,13 @@ class TaskListCreateAPIView(ListCreateAPIView):
     filterset_fields = ['status', 'deadline']
     search_fields = ['title', 'description']
     ordering_fields = ['created_at']
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class TaskRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class SubTaskListCreateAPIView(ListCreateAPIView):
@@ -84,11 +85,13 @@ class SubTaskListCreateAPIView(ListCreateAPIView):
     filterset_fields = ['status', 'deadline']
     search_fields = ['title', 'description']
     ordering_fields = ['created_at']
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class SubTaskDetailUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
+    permission_classes = [IsAuthenticated]
 
 
 # Представление для всех задач GET и POST:
@@ -209,6 +212,7 @@ def task_list(request):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])
     def count_tasks(self, request):

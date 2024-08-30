@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="345d9c47-638e-4676-90c0-4924b4ed9c03" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drf_homework/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/drf_homework/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,7 +206,8 @@
       <workItem from="1724614234905" duration="1527000" />
       <workItem from="1724655904482" duration="1113000" />
       <workItem from="1724690807137" duration="3921000" />
-      <workItem from="1724702683726" duration="1412000" />
+      <workItem from="1724702683726" duration="1774000" />
+      <workItem from="1724742214851" duration="7000" />
     </task>
     <servers />
   </component>
